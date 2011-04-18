@@ -1,0 +1,136 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.example</groupId>
+  <artifactId>example</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <properties>
+    <jacoco.version>0.5.1.20110321224001</jacoco.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jacoco</groupId>
+      <artifactId>org.jacoco.agent.rt</artifactId>
+      <version>${jacoco.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.example</groupId>
+      <artifactId>jacoco-junit</artifactId>
+      <version>0.1-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.8.1</version>
+        <configuration>
+          <argLine>-javaagent:${settings.localRepository}/org/jacoco/org.jacoco.agent.rt/${jacoco.version}/org.jacoco.agent.rt-${jacoco.version}.jar=output=tcpserver</argLine>
+          <properties>
+            <property>
+              <name>listener</name>
+              <value>org.example.JacocoListener</value>
+            </property>
+          </properties>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <id>coverage-reports</id>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <typedef resource="org/jacoco/ant/antlib.xml"/>
+                <echo message="Coverage report"/>
+                <report>
+                  <executiondata>
+                    <fileset dir="target" includes="*First*.exec"/>
+                  </executiondata>
+                  <structure name="test">
+                    <classfiles>
+                      <fileset dir="target/classes" includes="**/*.class"/>
+                    </classfiles>
+                    <sourcefiles>
+                      <fileset dir="src/main/java"/>
+                    </sourcefiles>
+                  </structure>
+                  <html destdir="${project.build.directory}/jacoco/first"/>
+                </report>
+                <report>
+                  <executiondata>
+                    <fileset dir="target" includes="*Second*.exec"/>
+                  </executiondata>
+                  <structure name="test">
+                    <classfiles>
+                      <fileset dir="target/classes" includes="**/*.class"/>
+                    </classfiles>
+                    <sourcefiles>
+                      <fileset dir="src/main/java"/>
+                    </sourcefiles>
+                  </structure>
+                  <html destdir="${project.build.directory}/jacoco/second"/>
+                </report>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.ant-nodeps</artifactId>
+            <version>${jacoco.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <repository>
+      <!-- for jacoco -->
+      <id>sonar</id>
+      <name>Sonar</name>
+      <url>http://repository.sonarsource.org/content/repositories/sonar</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>sonar</id>
+      <url>http://repository.sonarsource.org/content/repositories/sonar</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+</project>
