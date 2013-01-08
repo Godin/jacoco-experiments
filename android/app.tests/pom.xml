@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.example.android</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>app.tests</artifactId>
+  <packaging>apk</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android-test</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.jayway.android.robotium</groupId>
+      <artifactId>robotium-solo</artifactId>
+      <version>3.6</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.example.android</groupId>
+      <artifactId>app</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+      <type>apk</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.example.android</groupId>
+      <artifactId>app</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+      <type>jar</type>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>emma</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.jacoco</groupId>
+          <artifactId>org.jacoco.agent</artifactId>
+          <classifier>runtime</classifier>
+          <version>${jacoco.version}</version>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+            <artifactId>android-maven-plugin</artifactId>
+            <configuration>
+              <test>
+                <coverage>true</coverage>
+                <createReport>true</createReport>
+              </test>
+            </configuration>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <id>pull-coverage</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>pull</goal>
+                </goals>
+                <configuration>
+                  <pullSource>/data/data/org.example/files/coverage.ec</pullSource>
+                  <pullDestination>${project.basedir}/../app/target/jacoco.exec</pullDestination>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>
