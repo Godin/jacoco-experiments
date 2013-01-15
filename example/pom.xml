@@ -40,6 +40,9 @@
             </goals>
             <configuration>
               <output>mbean</output>
+              <includes>
+                <include>org/example/App</include>
+              </includes>
             </configuration>
           </execution>
           <execution>
