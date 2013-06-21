@@ -55,16 +55,17 @@
         <version>${jacoco.version}</version>
         <executions>
           <execution>
+            <id>instrument</id>
+            <phase>process-classes</phase>
             <goals>
-              <!-- By default bound to process-classes phase: -->
               <goal>instrument</goal>
-              <!-- By default bound to prepare-package phase: -->
-              <goal>restore-instrumented-classes</goal>
             </goals>
           </execution>
           <execution>
-            <id>jacoco-report</id>
+            <id>restore</id>
+            <phase>prepare-package</phase>
             <goals>
+              <goal>restore-instrumented-classes</goal>
               <goal>report</goal>
             </goals>
           </execution>
